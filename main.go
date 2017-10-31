@@ -14,33 +14,47 @@
 
 package main
 
-import "go-healthcheck/modules/api"
-import "net/http"
-import "time"
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
 
 func main() {
-	api.Serve(8080)
+	c := make(chan App)
+	initApi(c)
+	initDb("db")
+	go runChecksApp(c)
+	Serve(8080)
 }
 
-func runChecks() {
-}
+func runChecksApp(c chan App) {
+	apps := getAllApps()
 
-func runChecksApp() {
-	apps := api.GetAllApps()
-
-	for a := range apps {
-		go func(a App){
-			runHttpCheck(a)
-		}
+	for _, a := range apps {
+		go func(a App) {
+			runHttpCheck(a, c)
+		}(a)
 	}
 
-	time.Sleep(time.Duration(5))
+	for a := range c {
+		go runHttpCheck(a, c)
+	}
 }
 
-func runHttpCheck(a App){
-	res, err := http.Get(a.URL)
+func runHttpCheck(a App, c chan App) {
+	_, err := http.Get(a.URL)
 
-	a.Status = err != nil ? "down" : "up"
+	if err != nil {
+		a.Status = "down"
+	} else {
+		a.Status = "up"
+	}
 
-	api.UpdateApp(a.Name, app)
+	fmt.Println("App", a.URL, "is", a.Status)
+
+	updateApp(a.Name, a)
+
+	time.Sleep(time.Second * time.Duration(a.PollTime))
+	c <- a
 }

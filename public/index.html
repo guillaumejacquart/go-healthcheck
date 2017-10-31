@@ -25,6 +25,10 @@
                     <div class="app-name">{{app.name}}</div>
                     <div class="app-status">{{app.status}}</div>
                     <div class="app-url">{{app.url}}</div>
+                    <div class="app-buttons">
+                        <button type="button" class="btn btn-primary" v-on:click="updateForm(app)">Update</button>
+                        <button type="submit" class="btn btn-danger" v-on:click="delete(app)">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -32,7 +36,7 @@
         <!-- Modal -->
         <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form id="add-app-form" v-on:submit="addApp()">
+                <form id="add-app-form" v-on:submit="saveApp()">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>

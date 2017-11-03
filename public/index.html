@@ -27,7 +27,7 @@
                     <div class="app-url">{{app.url}}</div>
                     <div class="app-buttons">
                         <button type="button" class="btn btn-primary" v-on:click="updateForm(app)">Update</button>
-                        <button type="submit" class="btn btn-danger" v-on:click="delete(app)">Delete</button>
+                        <button type="button" class="btn btn-danger" v-on:click="deleteApp(app)">Delete</button>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
         <!-- Modal -->
         <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form id="add-app-form" v-on:submit="saveApp()">
+                <form id="add-app-form" v-on:submit.prevent="saveApp()">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
@@ -60,7 +60,7 @@
                             <div class="form-group row">
                                 <label for="inputAppPoll" class="col-sm-2 col-form-label">Poll frequency (second)</label>
                                 <div class="col-sm-10">
-                                    <input v-model="newApp.pollTime" type="text" class="form-control" id="inputAppPoll" placeholder="5">
+                                    <input v-model="newApp.pollTime" type="number" class="form-control" id="inputAppPoll" placeholder="5">
                                 </div>
                             </div>
                         </div>

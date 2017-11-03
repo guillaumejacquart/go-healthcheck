@@ -2,7 +2,9 @@ var app = new Vue({
     el: '#app',
     data: {
         apps: [],
-        newApp: {}
+        newApp: {
+            pollTime: 5
+        }
     },
     created: function() {
         this.getApps()
@@ -28,7 +30,7 @@ var app = new Vue({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: this.newApp
+                body: JSON.stringify(this.newApp)
             }).then(function(res) {
                 if (res.status == 200) {
                     alert("App has been saved !");
@@ -37,8 +39,8 @@ var app = new Vue({
                 alert("Error submitting form!");
             });
         },
-        deleteApp: function(name) {
-            fetch("../apps/" + name, {
+        deleteApp: function(app) {
+            fetch("../apps/" + app.name, {
                 method: "DELETE"
             }).then(function(res) {
                 if (res.status == 200) {

@@ -1,78 +1,104 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
+	"time"
 
-	"github.com/nanobox-io/golang-scribble"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	"github.com/spf13/viper"
 )
 
-var db *scribble.Driver
+var db *gorm.DB
 
-func initDb(path string) {
-	newDb, err := scribble.New(path, nil)
-	db = newDb
+func initDb() {
+	dbType := viper.GetString("db.type")
+	dbPort := viper.GetInt("db.port")
+	dbHost := viper.GetString("db.host")
+	dbUsername := viper.GetString("db.username")
+	dbPassword := viper.GetString("db.password")
+	dbName := viper.GetString("db.name")
 
-	if err != nil {
-		fmt.Println("Error", err)
+	var connectionString string
+	switch dbType {
+	case "mysql":
+		connectionString = fmt.Sprintf(
+			"%v:%v@tcp(%v:%v)/%v?parseTime=true",
+			dbUsername,
+			dbPassword,
+			dbHost,
+			dbPort,
+			dbName)
+	case "postgres":
+		connectionString = fmt.Sprintf(
+			"host=%v port=%v user=%v dbname=%v sslmode=disable password=%v",
+			dbHost,
+			dbPort,
+			dbUsername,
+			dbName,
+			dbPassword)
 	}
+
+	dbInit, err := gorm.Open(dbType, connectionString)
+	if err != nil {
+		panic(err)
+	}
+
+	db = dbInit
+
+	// Migrate the schema
+	db.AutoMigrate(&App{}, &History{})
 }
 
-func getAllApps() []App {
-	records, err := db.ReadAll("apps")
-	if err != nil {
-		fmt.Println("Error", err)
-	}
+func getAllApps() ([]App, error) {
+	var apps []App
+	err := db.Find(&apps).Error
 
-	apps := []App{}
-	for _, f := range records {
-		appFound := App{}
-		if err := json.Unmarshal([]byte(f), &appFound); err != nil {
-			fmt.Println("Error", err)
-		}
-		apps = append(apps, appFound)
-	}
-
-	return apps
+	return apps, err
 }
 
-func getApp(name string) (App, error) {
+func getApp(id uint) (App, error) {
 	app := App{}
-	if err := db.Read("apps", name, &app); err != nil {
-		return app, err
-	}
+	err := db.First(&app, id).Error
 
-	return app, nil
+	return app, err
 }
 
-func insertApp(app App) error {
-	existingApp, err := getApp(app.Name)
-	if err != nil {
-		fmt.Println(err)
-	}
-	if existingApp.Name == app.Name {
-		return errors.New("app name already exists")
-	}
-	return db.Write("apps", app.Name, app)
+func insertApp(app *App) error {
+	app.LastUpDate = time.Now()
+	return db.Create(app).Error
 }
 
-func updateApp(name string, app App) error {
-	_, err := getApp(name)
-	if err != nil {
-		return err
-	}
-	return db.Write("apps", name, app)
+func insertHistory(history History) error {
+	return db.Create(&history).Error
 }
 
-func deleteApp(name string) error {
-	_, err := getApp(name)
+func getAppHistory(appID uint) ([]History, error) {
+	histories := []History{}
+	err := db.Order("date desc").Limit(5).Where("app_id = ?", appID).Find(&histories).Error
+
+	return histories, err
+}
+
+func updateApp(id uint, app App) error {
+	existingApp, err := getApp(id)
 	if err != nil {
 		return err
 	}
-	return db.Delete("apps", name)
+
+	existingApp.URL = app.URL
+	existingApp.PollTime = app.PollTime
+	existingApp.Status = app.Status
+	existingApp.LastUpDate = app.LastUpDate
+
+	return db.Save(&existingApp).Error
 }
 
-func insertObject(collection string, id string, object interface{}) error {
-	return db.Write(collection, id, object)
+func deleteApp(id uint) error {
+	app, err := getApp(id)
+	if err != nil {
+		return err
+	}
+
+	return db.Delete(&app).Error
 }

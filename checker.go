@@ -8,16 +8,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func startCheck() {
-	c := make(chan App)
-	initApi(c)
-	initDb("db")
-	go runChecksApp(c)
-	Serve(8080)
-}
-
 func runChecksApp(c chan App) {
-	apps := getAllApps()
+	apps, err := getAllApps()
+
+	if err != nil {
+		panic(err)
+	}
 
 	for _, a := range apps {
 		go func(a App) {
@@ -32,8 +28,13 @@ func runChecksApp(c chan App) {
 
 func runHTTPCheck(a App, c chan App) {
 	nowDate := time.Now()
-	lastApp, _ := getApp(a.Name)
-	_, err := http.Get(lastApp.URL)
+	lastApp, _ := getApp(a.ID)
+
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
+	_, err := client.Get(lastApp.URL)
 
 	if err != nil {
 		lastApp.Status = "down"
@@ -44,26 +45,23 @@ func runHTTPCheck(a App, c chan App) {
 
 	fmt.Println("App", lastApp.URL, "is", lastApp.Status)
 
-	updateApp(lastApp.Name, lastApp)
+	updateApp(lastApp.ID, lastApp)
 
 	if lastApp.Status != a.Status {
-		insertHistory(lastApp, nowDate)
+		addHistory(lastApp, nowDate)
 	}
 
 	time.Sleep(time.Second * time.Duration(lastApp.PollTime))
 	c <- lastApp
 }
 
-func insertHistory(app App, date time.Time) {
+func addHistory(app App, date time.Time) {
 	if viper.GetBool("history.enabled") {
 		history := History{
-			AppName: app.Name,
-			Date:    date,
-			Status:  app.Status,
+			AppID:  app.ID,
+			Date:   date,
+			Status: app.Status,
 		}
-		dbType := viper.Get("history.db_type")
-		if dbType == "file" {
-			insertObject("history", fmt.Sprintf("%v", date.Unix()), history)
-		}
+		insertHistory(history)
 	}
 }

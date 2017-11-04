@@ -10,12 +10,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="open-iconic/font/css/open-iconic-bootstrap.css">
-    <link rel="stylesheet" href="apps.css" />
+    <link rel="stylesheet" href="css/apps.css" />
 </head>
 
 <body>
     <div id="app" v-cloak>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
             <a class="navbar-brand" href="/app/">go-healthcheck</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,7 @@
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="resetForm()">Add app</button>
+                    <button class="btn btn-success my-2 my-sm-0" type="button" v-on:click="resetForm()">Add app</button>
                 </form>
             </div>
         </nav>
@@ -51,6 +51,14 @@
                                 <div class="app-status-text">
                                     Application is {{app.status}}
                                 </div>
+                                <span class="app-status-history oi oi-clock" v-on:click="getHistory(app)"></span>
+                            </div>
+                            <div class="app-history" v-show="history.app_id == app.ID">
+                                <ul>
+                                    <li v-for="h in history.items">
+                                        {{h.date}} - {{h.status}}
+                                    </li>
+                                </ul>
                             </div>
                             <div class="app-lastup">Last up : {{formatUpdate(app.lastUpDate)}}</div>
                             <div class="app-buttons btn-group btn-group-sm">

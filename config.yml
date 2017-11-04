@@ -1,3 +1,9 @@
 history:
   enabled: true
-  db_type: file
+db:
+  type: mysql
+  username: root
+  password: password
+  host: localhost
+  port: 3306
+  name: healthcheck

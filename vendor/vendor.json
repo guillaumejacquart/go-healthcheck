@@ -3,6 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
+			"path": "appengine/cloudsql",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "x2Km0Qy3WgJJnV19Zv25VwTJcBM=",
 			"path": "github.com/fsnotify/fsnotify",
 			"revision": "4da3e2cfbabc9f751898f250b49f2439785783a1",
@@ -43,6 +47,12 @@
 			"path": "github.com/gin-gonic/gin/render",
 			"revision": "6653d5d588740eb73d2245ef04d5a407d3c3f034",
 			"revisionTime": "2017-10-30T02:38:38Z"
+		},
+		{
+			"checksumSHA1": "os4jdoOUjr86qvOwri8Ut1rXDrg=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "fade21009797158e7b79e04c340118a9220c6f9e",
+			"revisionTime": "2017-10-17T18:16:16Z"
 		},
 		{
 			"checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
@@ -117,6 +127,24 @@
 			"revisionTime": "2016-03-24T20:37:08Z"
 		},
 		{
+			"checksumSHA1": "KBZAPkgG/bO26yf2KYKLZPyQw9k=",
+			"path": "github.com/jinzhu/gorm",
+			"revision": "0a51f6cdc55d1650d9ed3b4c13026cfa9133b01e",
+			"revisionTime": "2017-10-10T13:28:39Z"
+		},
+		{
+			"checksumSHA1": "eECxSkwh0WmhLwaxHfkvcLOWS08=",
+			"path": "github.com/jinzhu/gorm/dialects/mysql",
+			"revision": "0a51f6cdc55d1650d9ed3b4c13026cfa9133b01e",
+			"revisionTime": "2017-10-10T13:28:39Z"
+		},
+		{
+			"checksumSHA1": "VIp1lZm6joWhlNdwhady8u//qRw=",
+			"path": "github.com/jinzhu/inflection",
+			"revision": "1c35d901db3da928c72a72d8458480cc9ade058f",
+			"revisionTime": "2017-01-02T12:52:26Z"
+		},
+		{
 			"checksumSHA1": "b2NiN1GGbHAZt29VxFYGfjVW67g=",
 			"path": "github.com/json-iterator/go",
 			"revision": "aed5a81f09330b8d254a117fb853e2f886f1cb3b",
@@ -133,6 +161,12 @@
 			"path": "github.com/mattn/go-isatty",
 			"revision": "a5cdd64afdee435007ee3e9f6ed4684af949d568",
 			"revisionTime": "2017-09-25T05:49:04Z"
+		},
+		{
+			"checksumSHA1": "vJOfjdXbjymKpuay2nyRnGncJUw=",
+			"path": "github.com/mattn/go-sqlite3",
+			"revision": "615c193e01d8d462eef7ee390171506f531a1c9a",
+			"revisionTime": "2017-10-24T02:57:10Z"
 		},
 		{
 			"checksumSHA1": "V/quM7+em2ByJbWBLOsEwnY3j/Q=",
@@ -205,6 +239,12 @@
 			"path": "github.com/ugorji/go/codec",
 			"revision": "d03304bb1d83c196fd3017dca37e89a4504b3676",
 			"revisionTime": "2017-10-30T15:53:33Z"
+		},
+		{
+			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
+			"path": "golang.org/x/net/context",
+			"revision": "01c190206fbdffa42f334f4b2bf2220f50e64920",
+			"revisionTime": "2017-11-02T18:53:09Z"
 		},
 		{
 			"checksumSHA1": "fGI0otWWIlwqEhJDgXdhdLlUJzM=",

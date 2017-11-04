@@ -22,8 +22,27 @@ var app = new Vue({
                 }
             });
         },
+        getHistory: function (app) {
+            var that = this;
+            if(that.history && that.history.app_id === app.ID){
+                that.history = false;
+                return;
+            }
+
+            fetch("../apps/" + app.ID + "/history").then(function (response) {
+                var contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return response.json().then(function (json) {
+                        that.history = {
+                            app_id: app.ID,
+                            items: json
+                        };
+                    });
+                }
+            });
+        },
         saveApp: function () {
-            var url = this.newApp.isUpdate ? ('../apps/' + this.newApp.name) : '../apps';
+            var url = this.newApp.isUpdate ? ('../apps/' + this.newApp.ID) : '../apps';
             var method = this.newApp.isUpdate ? 'PUT' : 'POST'
             fetch(url, {
                 method: method,
@@ -48,12 +67,9 @@ var app = new Vue({
                 return;
             }
 
-            fetch("../apps/" + app.name, {
+            fetch("../apps/" + app.ID, {
                 method: "DELETE"
             }).then(function (res) {
-                if (res.status == 200) {
-                    alert("App has been deleted !");
-                }
             }, function (e) {
                 alert("Error submitting form!");
             });

@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <a class="navbar-brand" href="/app/">go-healthcheck</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -35,7 +35,7 @@
                 </form>
             </div>
         </nav>
-        <div class="container-fluid">
+        <div class="container">
             <div id="app-content">
                 <div class="row justify-content-center" id="app-list">
                     <div v-for="app in apps" class="col-sm-3">
@@ -43,7 +43,7 @@
                             <div class="app-header">
                                 <div class="app-name">{{app.name}}</div>
                                 <div class="app-url">
-                                    <a href="{{app.url}}">{{app.url}}</a>
+                                    <a target="_blank" v-bind:href="app.url">{{app.url}}</a>
                                 </div>
                             </div>
                             <div class="app-status" v-bind:class="app.status">
@@ -110,7 +110,7 @@
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
-    <script src="apps.js"></script>
+    <script src="js/apps.js"></script>
 </body>
 
 </html>

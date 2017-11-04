@@ -41,6 +41,10 @@ var app = new Vue({
             });
         },
         deleteApp: function (app) {
+            if (!confirm('Are you sure you want to delete this app ?')) {
+                return;
+            }
+
             fetch("../apps/" + app.name, {
                 method: "DELETE"
             }).then(function (res) {
@@ -56,7 +60,7 @@ var app = new Vue({
             this.newApp.isUpdate = true;
             $('#add-app').modal('show');
         },
-        resetForm: function(){            
+        resetForm: function () {
             this.newApp = {
                 pollTime: 5
             };

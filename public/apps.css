@@ -1,3 +1,7 @@
+[v-cloak] {
+    display: none;
+}
+
 #app{    
     background-color: #F1F1F1;
     color: #333;
@@ -18,7 +22,7 @@
 
 .app{
     position: relative;
-    min-height: 185px;
+    min-height: 13.5rem;
     margin: 15px 0px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -27,6 +31,7 @@
 }
 
 .app-header{
+    min-height: 5.5rem;
     background-color:#f9f9f9;
     margin: -10px;
     padding: 10px;

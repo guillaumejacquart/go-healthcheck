@@ -30,10 +30,13 @@ var app = new Vue({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(this.newApp)
+                body: JSON.stringify({
+                    name: this.newApp.name,
+                    url: this.newApp.url,
+                    pollTime: this.newApp.pollTime
+                })
             }).then(function (res) {
                 if (res.status == 200) {
-                    alert("App has been saved !");
                     $('#add-app').modal('hide');
                 }
             }, function (e) {

@@ -16,46 +16,21 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"time"
+
+	"github.com/spf13/viper"
 )
 
 func main() {
-	c := make(chan App)
-	initApi(c)
-	initDb("db")
-	go runChecksApp(c)
-	Serve(8080)
-}
+	viper.SetDefault("history.enabled", "false")
 
-func runChecksApp(c chan App) {
-	apps := getAllApps()
-
-	for _, a := range apps {
-		go func(a App) {
-			runHTTPCheck(a, c)
-		}(a)
+	viper.SetConfigName("config")                // name of config file (without extension)
+	viper.AddConfigPath("/etc/go-healthcheck/")  // path to look for the config file in
+	viper.AddConfigPath("$HOME/.go-healthcheck") // call multiple times to add many search paths
+	viper.AddConfigPath(".")                     // optionally look for config in the working directory
+	err := viper.ReadInConfig()                  // Find and read the config file
+	if err != nil {                              // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 
-	for a := range c {
-		go runHTTPCheck(a, c)
-	}
-}
-
-func runHTTPCheck(a App, c chan App) {
-	_, err := http.Get(a.URL)
-
-	if err != nil {
-		a.Status = "down"
-	} else {
-		a.Status = "up"
-		a.LastUpDate = time.Now()
-	}
-
-	fmt.Println("App", a.URL, "is", a.Status)
-
-	updateApp(a.Name, a)
-
-	time.Sleep(time.Second * time.Duration(a.PollTime))
-	c <- a
+	startCheck()
 }

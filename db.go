@@ -72,3 +72,7 @@ func deleteApp(name string) error {
 	}
 	return db.Delete("apps", name)
 }
+
+func insertObject(collection string, id string, object interface{}) error {
+	return db.Write(collection, id, object)
+}

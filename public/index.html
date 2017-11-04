@@ -2,84 +2,114 @@
 <html lang="en">
 
 <head>
-    <title>Hello, world!</title>
+    <title>go-healthcheck</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="open-iconic/font/css/open-iconic-bootstrap.css">
     <link rel="stylesheet" href="apps.css" />
 </head>
 
 <body>
-    <div class="container" id="app">
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <button class="btn btn-block btn-success" data-toggle="modal" data-target="#add-app">Add app</button>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="/app/">go-healthcheck</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/app/">Apps
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="resetForm()">Add app</button>
+                </form>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div v-for="app in apps" class="col-sm-4">
-                <div class="app">
-                    <div class="app-name">{{app.name}}</div>
-                    <div class="app-status">{{app.status}}</div>
-                    <div class="app-url">{{app.url}}</div>
-                    <div class="app-buttons">
-                        <button type="button" class="btn btn-primary" v-on:click="updateForm(app)">Update</button>
-                        <button type="button" class="btn btn-danger" v-on:click="deleteApp(app)">Delete</button>
+        </nav>
+        <div class="container-fluid">
+            <div id="app-content">
+                <div class="row justify-content-center" id="app-list">
+                    <div v-for="app in apps" class="col-sm-3">
+                        <div class="app">
+                            <div class="app-header">
+                                <div class="app-name">{{app.name}}</div>
+                                <div class="app-url">
+                                    <a href="{{app.url}}">{{app.url}}</a>
+                                </div>
+                            </div>
+                            <div class="app-status" v-bind:class="app.status">
+                                <span class="app-status-icon oi" v-bind:class="getIcon(app)" title="icon name" aria-hidden="true"></span>
+                                <div class="app-status-text">
+                                    Application is {{app.status}}
+                                </div>
+                            </div>
+                            <div class="app-lastup">Last up : {{formatUpdate(app.lastUpDate)}}</div>
+                            <div class="app-buttons btn-group btn-group-sm">
+                                <button type="button" class="btn btn-primary" v-on:click="updateForm(app)">Update</button>
+                                <button type="button" class="btn btn-danger" v-on:click="deleteApp(app)">Delete</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form id="add-app-form" v-on:submit.prevent="saveApp()">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <label for="inputAppName" class="col-sm-2 col-form-label">App name</label>
-                                <div class="col-sm-10">
-                                    <input v-model="newApp.name" type="text" class="form-control" id="inputAppName" placeholder="name">
+            <!-- Modal -->
+            <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <form id="add-app-form" v-on:submit.prevent="saveApp()">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">{{!newApp.isUpdate ? 'New app' : 'Edit ' + newApp.name}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <label for="inputAppName" class="col-sm-5 col-form-label">App name</label>
+                                    <div class="col-sm-7">
+                                        <input v-model="newApp.name" type="text" class="form-control" id="inputAppName" placeholder="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputAppUrl" class="col-sm-5 col-form-label">App URL</label>
+                                    <div class="col-sm-7">
+                                        <input v-model="newApp.url" type="text" class="form-control" id="inputAppUrl" placeholder="url">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputAppPoll" class="col-sm-5 col-form-label">Poll frequency (second)</label>
+                                    <div class="col-sm-7">
+                                        <input v-model="newApp.pollTime" type="number" class="form-control" id="inputAppPoll" placeholder="5">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="inputAppUrl" class="col-sm-2 col-form-label">App URL</label>
-                                <div class="col-sm-10">
-                                    <input v-model="newApp.url" type="text" class="form-control" id="inputAppUrl" placeholder="url">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputAppPoll" class="col-sm-2 col-form-label">Poll frequency (second)</label>
-                                <div class="col-sm-10">
-                                    <input v-model="newApp.pollTime" type="number" class="form-control" id="inputAppPoll" placeholder="5">
-                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/vue"></script>
+    <script src="js/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
     <script src="apps.js"></script>
 </body>
 

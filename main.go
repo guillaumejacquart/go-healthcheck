@@ -33,22 +33,23 @@ func runChecksApp(c chan App) {
 
 	for _, a := range apps {
 		go func(a App) {
-			runHttpCheck(a, c)
+			runHTTPCheck(a, c)
 		}(a)
 	}
 
 	for a := range c {
-		go runHttpCheck(a, c)
+		go runHTTPCheck(a, c)
 	}
 }
 
-func runHttpCheck(a App, c chan App) {
+func runHTTPCheck(a App, c chan App) {
 	_, err := http.Get(a.URL)
 
 	if err != nil {
 		a.Status = "down"
 	} else {
 		a.Status = "up"
+		a.LastUpDate = time.Now()
 	}
 
 	fmt.Println("App", a.URL, "is", a.Status)

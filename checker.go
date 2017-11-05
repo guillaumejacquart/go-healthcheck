@@ -36,16 +36,17 @@ func runHTTPCheck(a App, c chan App) {
 	}
 	_, err := client.Get(lastApp.URL)
 
+	var status string
+
 	if err != nil {
-		lastApp.Status = "down"
+		status = "down"
 	} else {
-		lastApp.Status = "up"
-		lastApp.LastUpDate = nowDate
+		status = "up"
 	}
 
-	fmt.Println("App", lastApp.URL, "is", lastApp.Status)
+	fmt.Println("App", lastApp.URL, "is", status)
 
-	updateApp(lastApp.ID, lastApp)
+	updateAppStatus(lastApp.ID, status)
 
 	if lastApp.Status != a.Status {
 		addHistory(lastApp, nowDate)

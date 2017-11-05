@@ -52,7 +52,7 @@ var app = new Vue({
                 body: JSON.stringify({
                     name: this.newApp.name,
                     url: this.newApp.url,
-                    pollTime: this.newApp.pollTime
+                    pollTime: parseInt(this.newApp.pollTime)
                 })
             }).then(function (res) {
                 if (res.status == 200) {

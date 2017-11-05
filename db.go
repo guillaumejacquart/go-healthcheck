@@ -88,8 +88,20 @@ func updateApp(id uint, app App) error {
 
 	existingApp.URL = app.URL
 	existingApp.PollTime = app.PollTime
-	existingApp.Status = app.Status
-	existingApp.LastUpDate = app.LastUpDate
+
+	return db.Save(&existingApp).Error
+}
+
+func updateAppStatus(id uint, status string) error {
+	existingApp, err := getApp(id)
+	if err != nil {
+		return err
+	}
+
+	existingApp.Status = status
+	if status == "up" {
+		existingApp.LastUpDate = time.Now()
+	}
 
 	return db.Save(&existingApp).Error
 }

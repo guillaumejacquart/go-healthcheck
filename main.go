@@ -19,14 +19,17 @@ import (
 )
 
 func main() {
+	viper.SetDefault("port", 8080)
 	viper.SetDefault("history.enabled", "false")
 
 	viper.SetConfigName("config")                // name of config file (without extension)
 	viper.AddConfigPath("/etc/go-healthcheck/")  // path to look for the config file in
 	viper.AddConfigPath("$HOME/.go-healthcheck") // call multiple times to add many search paths
 	viper.AddConfigPath(".")                     // optionally look for config in the working directory
-	err := viper.ReadInConfig()                  // Find and read the config file
-	if err != nil {                              // Handle errors reading the config file
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
 		panic(err)
 	}
 
@@ -36,5 +39,5 @@ func main() {
 	initAPI(c)
 	go runChecksApp(c)
 
-	Serve(8080)
+	Serve(viper.GetInt("port"))
 }

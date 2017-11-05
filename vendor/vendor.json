@@ -7,6 +7,30 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "gALmTf0q6kHO/cGP85mBwc/cwtk=",
+			"path": "github.com/docker/distribution/context",
+			"revision": "3800056b8832cf6075e78b282ac010131d8687bc",
+			"revisionTime": "2017-10-23T08:07:44Z"
+		},
+		{
+			"checksumSHA1": "oFgg0LXTCZuYeI0/eEatdTyLexg=",
+			"path": "github.com/docker/distribution/registry/api/errcode",
+			"revision": "3800056b8832cf6075e78b282ac010131d8687bc",
+			"revisionTime": "2017-10-23T08:07:44Z"
+		},
+		{
+			"checksumSHA1": "cNp7rNReJHvdSfrIetXS9RGsLSo=",
+			"path": "github.com/docker/distribution/uuid",
+			"revision": "3800056b8832cf6075e78b282ac010131d8687bc",
+			"revisionTime": "2017-10-23T08:07:44Z"
+		},
+		{
+			"checksumSHA1": "2UYeFnce+Ut44HNmfIWkUlEsOF4=",
+			"path": "github.com/docker/go-healthcheck",
+			"revision": "a4f20681d8a1929b947920b5dfe2d16809d815ca",
+			"revisionTime": "2017-10-09T12:53:52Z"
+		},
+		{
 			"checksumSHA1": "x2Km0Qy3WgJJnV19Zv25VwTJcBM=",
 			"path": "github.com/fsnotify/fsnotify",
 			"revision": "4da3e2cfbabc9f751898f250b49f2439785783a1",
@@ -59,6 +83,18 @@
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9",
 			"revisionTime": "2017-10-21T04:39:52Z"
+		},
+		{
+			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "hUTpkQKTPpTUll9JmFj9NyQ+wjs=",
+			"path": "github.com/gorilla/mux",
+			"revision": "7f08801859139f86dfafd1c296e2cba9a80d292e",
+			"revisionTime": "2017-11-05T17:23:20Z"
 		},
 		{
 			"checksumSHA1": "HtpYAWHvd9mq+mHkpo7z8PGzMik=",
@@ -223,6 +259,12 @@
 			"revisionTime": "2017-10-24T21:10:38Z"
 		},
 		{
+			"checksumSHA1": "BYvROBsiyAXK4sq6yhDe8RgT4LM=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "89742aefa4b206dcf400792f3bd35b542998eb3b",
+			"revisionTime": "2017-08-22T13:27:46Z"
+		},
+		{
 			"checksumSHA1": "XoWOSxnNZQd2ZdT4ZiWdH19Hgmo=",
 			"path": "github.com/spf13/afero",
 			"revision": "5660eeed305fe5f69c8fc6cf899132a459a97064",
@@ -271,6 +313,12 @@
 			"revisionTime": "2017-10-30T15:53:33Z"
 		},
 		{
+			"checksumSHA1": "nqWNlnMmVpt628zzvyo6Yv2CX5Q=",
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": "ca1fcd4ab4c10bc58852a894bcf195fab2229efe",
+			"revisionTime": "2017-11-05T16:37:19Z"
+		},
+		{
 			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
 			"path": "golang.org/x/net/context",
 			"revision": "01c190206fbdffa42f334f4b2bf2220f50e64920",
@@ -281,6 +329,12 @@
 			"path": "golang.org/x/sys/unix",
 			"revision": "95c6576299259db960f6c5b9b69ea52422860fce",
 			"revisionTime": "2017-10-30T10:08:44Z"
+		},
+		{
+			"checksumSHA1": "8BcMOi8XTSigDtV2npDc8vMrS60=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "8eb05f94d449fdf134ec24630ce69ada5b469c1c",
+			"revisionTime": "2017-11-04T16:30:55Z"
 		},
 		{
 			"checksumSHA1": "ziMb9+ANGRJSSIuxYdRbA+cDRBQ=",

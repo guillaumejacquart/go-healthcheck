@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	health "github.com/docker/go-healthcheck"
 	"github.com/spf13/viper"
 )
 
@@ -16,17 +17,17 @@ func runChecksApp(c chan App) {
 	}
 
 	for _, a := range apps {
-		go func(a App) {
-			runHTTPCheck(a, c)
-		}(a)
-	}
-
-	for a := range c {
-		go runHTTPCheck(a, c)
+		registerCheck(a)
 	}
 }
 
-func runHTTPCheck(a App, c chan App) {
+func registerCheck(a App) {
+	health.RegisterPeriodicFunc(a.Name, time.Second*time.Duration(a.PollTime), func() error {
+		return runHTTPCheck(a)
+	})
+}
+
+func runHTTPCheck(a App) error {
 	nowDate := time.Now()
 	lastApp, _ := getApp(a.ID)
 
@@ -52,8 +53,7 @@ func runHTTPCheck(a App, c chan App) {
 		addHistory(lastApp, nowDate)
 	}
 
-	time.Sleep(time.Second * time.Duration(lastApp.PollTime))
-	c <- lastApp
+	return err
 }
 
 func addHistory(app App, date time.Time) {

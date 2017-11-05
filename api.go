@@ -88,7 +88,7 @@ func Serve(port int) {
 			if err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
-				go runHTTPCheck(app, appChan)
+				registerCheck(app)
 				c.JSON(http.StatusOK, app)
 			}
 		} else {

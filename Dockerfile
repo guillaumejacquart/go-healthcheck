@@ -1,7 +1,7 @@
 FROM golang:1.9-alpine
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git && \
+    apk add --no-cache bash git gcc g++ && \
     go get -u -v github.com/kardianos/govendor
 
 WORKDIR /go/src/app

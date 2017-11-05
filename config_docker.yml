@@ -1,9 +1,5 @@
 history:
   enabled: true
 db:
-  type: mysql
-  username: root
-  password: password
-  host: mysql
-  port: 3306
-  name: healthcheck
+  type: sqlite3
+  path: data.db

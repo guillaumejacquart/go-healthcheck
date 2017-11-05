@@ -6,6 +6,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/spf13/viper"
 )
 
@@ -18,6 +20,7 @@ func initDb() {
 	dbUsername := viper.GetString("db.username")
 	dbPassword := viper.GetString("db.password")
 	dbName := viper.GetString("db.name")
+	dbPath := viper.GetString("db.path")
 
 	var connectionString string
 	switch dbType {
@@ -37,6 +40,8 @@ func initDb() {
 			dbUsername,
 			dbName,
 			dbPassword)
+	case "sqlite3":
+		connectionString = dbPath
 	}
 
 	dbInit, err := gorm.Open(dbType, connectionString)

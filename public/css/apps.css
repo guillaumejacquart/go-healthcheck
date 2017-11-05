@@ -2,6 +2,15 @@
     display: none;
 }
 
+#no-app{
+    font-size:1.2rem;
+    text-align: center;
+}
+
+#app-filter{
+    margin-bottom: 2rem;
+}
+
 #app{    
     background-color: #F1F1F1;
     color: #333;

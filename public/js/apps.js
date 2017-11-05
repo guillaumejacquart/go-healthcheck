@@ -4,6 +4,18 @@ var app = new Vue({
         apps: [],
         newApp: {
             pollTime: 5
+        },
+        search: ''
+    },
+    computed:
+    {
+        filteredApps:function()
+        {
+            var self=this;
+            return this.apps.filter(function(app){
+                return app.name.toLowerCase().indexOf(self.search.toLowerCase())>=0
+                || app.url.toLowerCase().indexOf(self.search.toLowerCase())>=0;
+            });
         }
     },
     created: function () {

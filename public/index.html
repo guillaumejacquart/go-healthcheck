@@ -104,6 +104,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="inputAppCheckType" class="col-sm-5 col-form-label">Check type</label>
+                                    <div class="col-sm-7">
+                                        <select v-model="newApp.checkType" class="form-control" id="inputAppCheckType">
+                                            <option value="0">Has HTTP response</option>
+                                            <option value="1">HTTP Status Code</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row" v-if="newApp.checkType == 1">
+                                    <label for="inputAppCheckStatusCode" class="col-sm-5 col-form-label">Status Code</label>
+                                    <div class="col-sm-7">
+                                        <input v-model="newApp.statusCode" type="number" class="form-control" id="inputAppCheckStatusCode" placeholder="200">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="inputAppPoll" class="col-sm-5 col-form-label">Poll frequency (second)</label>
                                     <div class="col-sm-7">
                                         <input v-model="newApp.pollTime" type="number" class="form-control" id="inputAppPoll" placeholder="5">

@@ -5,7 +5,9 @@ var app = new Vue({
         newApp: {
             pollTime: 5
         },
-        search: ''
+        search: '',
+        checkType: 0,
+        statusCode: 200
     },
     computed:
     {
@@ -64,7 +66,9 @@ var app = new Vue({
                 body: JSON.stringify({
                     name: this.newApp.name,
                     url: this.newApp.url,
-                    pollTime: parseInt(this.newApp.pollTime)
+                    pollTime: parseInt(this.newApp.pollTime),
+                    checkType: parseInt(this.newApp.checkType),
+                    statusCode: parseInt(this.newApp.statusCode)
                 })
             }).then(function (res) {
                 if (res.status == 200) {

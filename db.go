@@ -93,6 +93,8 @@ func updateApp(id uint, app App) error {
 
 	existingApp.URL = app.URL
 	existingApp.PollTime = app.PollTime
+	existingApp.CheckType = app.CheckType
+	existingApp.StatusCode = app.StatusCode
 
 	return db.Save(&existingApp).Error
 }

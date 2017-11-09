@@ -1,6 +1,8 @@
 # Go healthcheck
 Go healthcheck is an opensource healthcheck system that ensures your HTTP applications are up and running.
 
+![Travis CI](https://travis-ci.org/guillaumejacquart/go-healthcheck.svg?branch=master)
+
 Live demo : https://check.apps.guillaumejacquart.com/app/
 
 ## Run

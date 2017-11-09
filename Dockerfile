@@ -9,4 +9,6 @@ COPY . .
 
 RUN govendor sync && govendor install +local && go build
 
+EXPOSE 8080
+
 CMD ["./app"]

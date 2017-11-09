@@ -12,12 +12,8 @@ import (
 func TestMain(m *testing.M) {
 	initConfig()
 
-	viper.Set("db.type", "mysql")
-	viper.Set("db.username", "root")
-	viper.Set("db.password", "password")
-	viper.Set("db.host", "localhost")
-	viper.Set("db.port", "3306")
-	viper.Set("db.name", "healthcheck_test")
+	viper.Set("db.type", "sqlite3")
+	viper.Set("db.path", "test.db")
 
 	initDb()
 

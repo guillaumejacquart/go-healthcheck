@@ -46,3 +46,9 @@ The configuration can be set in any of the following places :
   - port: the database port
   - name: the database name
   - path: the file database path (for sqlite3)
+
+## TBD
+
+- Notification email
+- Notification pushbullet or else
+- Test coverage

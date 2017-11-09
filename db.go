@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	//_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/spf13/viper"
 )
 
@@ -44,15 +45,19 @@ func initDb() {
 		connectionString = dbPath
 	}
 
+	log.Print("Connection to", connectionString)
 	dbInit, err := gorm.Open(dbType, connectionString)
 	if err != nil {
 		panic(err)
 	}
 
+	log.Print("Connected !")
 	db = dbInit
 
 	// Migrate the schema
+	log.Print("Migrating schema for ORM ...")
 	db.AutoMigrate(&App{}, &History{})
+	log.Print("Schema migrated !")
 }
 
 func getAllApps() ([]App, error) {

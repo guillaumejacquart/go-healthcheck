@@ -1,7 +1,7 @@
 language: go
-  go:
-    - 1.x
-  before_install:
-    - go get -u -v github.com/kardianos/govendor
-    - govendor sync
-    - govendor install +local
+go:
+  - 1.x
+before_install:
+  - go get -u -v github.com/kardianos/govendor
+  - govendor sync
+  - govendor install +local 

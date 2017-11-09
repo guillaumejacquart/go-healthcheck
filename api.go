@@ -8,12 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var appChan chan App
-
-func initAPI(c chan App) {
-	appChan = c
-}
-
 func cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")

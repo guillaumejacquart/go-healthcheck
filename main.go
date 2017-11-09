@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func main() {
+func initConfig() {
 	viper.SetDefault("port", 8080)
 	viper.SetDefault("history.enabled", "false")
 
@@ -32,12 +32,13 @@ func main() {
 	if err != nil {             // Handle errors reading the config file
 		panic(err)
 	}
+}
 
-	c := make(chan App)
+func main() {
+	initConfig()
 
 	initDb()
-	initAPI(c)
-	go runChecksApp(c)
+	go runChecksApp()
 
 	Serve(viper.GetInt("port"))
 }

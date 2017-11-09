@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func runChecksApp(c chan App) {
+func runChecksApp() {
 	apps, err := getAllApps()
 
 	if err != nil {

@@ -17,7 +17,7 @@ func cors() gin.HandlerFunc {
 }
 
 // Serve api server to specified port
-func Serve(port int) {
+func setupRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.Use(cors())
@@ -132,5 +132,9 @@ func Serve(port int) {
 		}
 	})
 
+	return router
+}
+
+func Serve(router *gin.Engine, port int) {
 	router.Run(fmt.Sprintf(":%v", port))
 }

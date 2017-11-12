@@ -45,7 +45,7 @@ func initDb() {
 		connectionString = dbPath
 	}
 
-	log.Print("Connection to", connectionString)
+	log.Println("Connection to", connectionString)
 	dbInit, err := gorm.Open(dbType, connectionString)
 	if err != nil {
 		panic(err)
@@ -55,9 +55,9 @@ func initDb() {
 	db = dbInit
 
 	// Migrate the schema
-	log.Print("Migrating schema for ORM ...")
+	log.Println("Migrating schema for ORM ...")
 	db.AutoMigrate(&App{}, &History{})
-	log.Print("Schema migrated !")
+	log.Println("Schema migrated !")
 }
 
 func getAllApps() ([]App, error) {

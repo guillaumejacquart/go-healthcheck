@@ -42,5 +42,6 @@ func main() {
 	initDb()
 	go runChecksApp()
 
-	Serve(viper.GetInt("port"))
+	router := setupRouter()
+	Serve(router, viper.GetInt("port"))
 }

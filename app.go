@@ -23,4 +23,5 @@ type App struct {
 	LastUpDate time.Time `json:"lastUpDate"`
 	CheckType  checkType `json:"checkType"`
 	StatusCode int       `json:"statusCode"`
+	Notify     bool      `json:"notify"`
 }

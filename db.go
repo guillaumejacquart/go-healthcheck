@@ -100,6 +100,7 @@ func updateApp(id uint, app App) error {
 	existingApp.PollTime = app.PollTime
 	existingApp.CheckType = app.CheckType
 	existingApp.StatusCode = app.StatusCode
+	existingApp.Notify = app.Notify
 
 	return db.Save(&existingApp).Error
 }

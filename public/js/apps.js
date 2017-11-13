@@ -68,7 +68,8 @@ var app = new Vue({
                     url: this.newApp.url,
                     pollTime: parseInt(this.newApp.pollTime),
                     checkType: parseInt(this.newApp.checkType),
-                    statusCode: parseInt(this.newApp.statusCode)
+                    statusCode: parseInt(this.newApp.statusCode),
+                    notify: this.newApp.notify
                 })
             }).then(function (res) {
                 if (res.status == 200) {

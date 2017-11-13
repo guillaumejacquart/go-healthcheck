@@ -48,6 +48,13 @@ The configuration can be set in any of the following places :
   - port: the database port
   - name: the database name
   - path: the file database path (for sqlite3)
+- smtp:
+  - host: the smtp host
+  - port: the smtp port
+  - username: the smtp username
+  - password: the smtp password
+  - from: the from email field
+  - to: the to email field
 
 ## TBD
 

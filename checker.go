@@ -12,6 +12,7 @@ import (
 
 func runChecksApp() {
 	apps, err := getAllApps()
+	fmt.Println(apps)
 
 	if err != nil {
 		panic(err)
@@ -24,12 +25,16 @@ func runChecksApp() {
 
 func registerCheck(a App) {
 	health.RegisterPeriodicFunc(a.Name, time.Second*time.Duration(a.PollTime), func() error {
-		lastApp, _ := getApp(a.ID)
-		err := runHTTPCheck(lastApp)
-		updateCheckedApp(a, lastApp, err)
-
-		return err
+		return checkApp(a)
 	})
+}
+
+func checkApp(a App) error {
+	lastApp, _ := getApp(a.ID)
+	err := runHTTPCheck(lastApp)
+	updateCheckedApp(a, lastApp, err)
+
+	return err
 }
 
 func runHTTPCheck(a App) error {

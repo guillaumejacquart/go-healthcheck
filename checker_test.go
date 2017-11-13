@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/magiconair/properties/assert"
+
 	"github.com/spf13/viper"
 )
 
@@ -27,6 +29,72 @@ func TestMain(m *testing.M) {
 	os.Exit(retCode)
 }
 
+func TestRunChecksApp(t *testing.T) {
+	apps, _ := getAllApps()
+	for _, a := range apps {
+		deleteApp(a.ID)
+	}
+
+	app := App{
+		Name:      "test1",
+		URL:       "http://google.fr",
+		Status:    "down",
+		CheckType: responseCheck,
+		PollTime:  2,
+	}
+
+	insertApp(&app)
+
+	runChecksApp()
+
+	timer := time.NewTimer(time.Second * 3)
+
+	<-timer.C
+
+	app, _ = getApp(app.ID)
+	assert.Equal(t, app.Status, "up")
+}
+
+func TestRegisterCheck(t *testing.T) {
+	app := App{
+		Name:      "test2",
+		URL:       "http://google.fr",
+		Status:    "down",
+		CheckType: responseCheck,
+		PollTime:  2,
+	}
+
+	insertApp(&app)
+
+	registerCheck(app)
+
+	timer := time.NewTimer(time.Second * 3)
+
+	<-timer.C
+
+	app, _ = getApp(app.ID)
+	assert.Equal(t, app.Status, "up")
+}
+
+func TestCheckApp(t *testing.T) {
+	app := App{
+		Name:      "test3",
+		URL:       "http://google.fr",
+		Status:    "down",
+		CheckType: responseCheck,
+		PollTime:  5,
+	}
+
+	insertApp(&app)
+
+	err := checkApp(app)
+
+	assert.Equal(t, err, nil)
+
+	app, _ = getApp(app.ID)
+	assert.Equal(t, app.Status, "up")
+}
+
 func TestRunHTTPCheck(t *testing.T) {
 	app := App{}
 	app.Name = "Test"
@@ -40,21 +108,25 @@ func TestRunHTTPCheck(t *testing.T) {
 
 func TestUpdateCheckedApp(t *testing.T) {
 
-	lastApp := new(App)
-	lastApp.Name = "Test"
-	lastApp.URL = "http://google.fr"
-	lastApp.Status = "down"
+	lastApp := App{
+		Name:      "test5",
+		URL:       "http://google.fr",
+		CheckType: responseCheck,
+		PollTime:  5,
+	}
 
-	insertApp(lastApp)
+	insertApp(&lastApp)
 
-	app := App{}
-	app.Name = "Test"
-	app.URL = "http://google.fr"
-	app.Status = "up"
+	app := App{
+		Name:      "test6",
+		URL:       "http://google.fr",
+		CheckType: responseCheck,
+		PollTime:  5,
+	}
 
 	var err error
 
-	updateCheckedApp(app, *lastApp, err)
+	updateCheckedApp(app, lastApp, err)
 
 	newApp, newErr := getApp(lastApp.ID)
 
@@ -69,14 +141,16 @@ func TestUpdateCheckedApp(t *testing.T) {
 
 func TestAddHistory(t *testing.T) {
 	viper.Set("history.enabled", true)
-	lastApp := new(App)
-	lastApp.Name = "Test"
-	lastApp.URL = "http://google.fr"
-	lastApp.Status = "down"
+	lastApp := App{
+		Name:      "test7",
+		URL:       "http://google.fr",
+		CheckType: responseCheck,
+		PollTime:  5,
+	}
 
-	insertApp(lastApp)
+	insertApp(&lastApp)
 
-	addHistory(*lastApp, time.Now())
+	addHistory(lastApp, time.Now())
 
 	history, newErr := getAppHistory(lastApp.ID)
 

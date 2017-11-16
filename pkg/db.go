@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -56,41 +57,41 @@ func initDb() {
 
 	// Migrate the schema
 	log.Println("Migrating schema for ORM ...")
-	db.AutoMigrate(&App{}, &History{})
+	db.AutoMigrate(&domain.App{}, &domain.History{})
 	log.Println("Schema migrated !")
 }
 
-func getAllApps() ([]App, error) {
-	var apps []App
+func getAllApps() ([]domain.App, error) {
+	var apps []domain.App
 	err := db.Find(&apps).Error
 
 	return apps, err
 }
 
-func getApp(id uint) (App, error) {
-	app := App{}
+func getApp(id uint) (domain.App, error) {
+	app := domain.App{}
 	err := db.First(&app, id).Error
 
 	return app, err
 }
 
-func insertApp(app *App) error {
+func insertApp(app *domain.App) error {
 	app.LastUpDate = time.Now()
 	return db.Create(app).Error
 }
 
-func insertHistory(history History) error {
+func insertHistory(history domain.History) error {
 	return db.Create(&history).Error
 }
 
-func getAppHistory(appID uint) ([]History, error) {
-	histories := []History{}
+func getAppHistory(appID uint) ([]domain.History, error) {
+	histories := []domain.History{}
 	err := db.Order("date desc").Limit(5).Where("app_id = ?", appID).Find(&histories).Error
 
 	return histories, err
 }
 
-func updateApp(id uint, app App) error {
+func updateApp(id uint, app domain.App) error {
 	existingApp, err := getApp(id)
 	if err != nil {
 		return err

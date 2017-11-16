@@ -11,37 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package main
 
 import (
-	"github.com/spf13/viper"
+	"github.com/guillaumejacquart/go-healthcheck/pkg"
 )
 
-func initConfig() {
-	viper.SetDefault("port", 8080)
-	viper.SetDefault("history.enabled", "false")
-	viper.SetDefault("db.type", "sqlite3")
-	viper.SetDefault("db.path", "data.db")
-
-	viper.SetConfigName("config")                // name of config file (without extension)
-	viper.AddConfigPath("/etc/go-healthcheck/")  // path to look for the config file in
-	viper.AddConfigPath("$HOME/.go-healthcheck") // call multiple times to add many search paths
-	viper.AddConfigPath(".")                     // optionally look for config in the working directory
-	viper.AutomaticEnv()
-
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(err)
-	}
-}
-
 func main() {
-	initConfig()
-
-	initDb()
-	go runChecksApp()
-
-	router := setupRouter()
-	Serve(router, viper.GetInt("port"))
+	pkg.Run(".")
 }

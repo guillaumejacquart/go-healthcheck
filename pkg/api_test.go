@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"bytes"
@@ -9,11 +9,21 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 	"github.com/magiconair/properties/assert"
 )
 
+func getRouter() *gin.Engine {
+	server := createServer()
+	server.initializeMiddlewares()
+	server.setupRoutes()
+
+	return server.Router
+}
+
 func TestApiGetAllApps(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
@@ -24,7 +34,7 @@ func TestApiGetAllApps(t *testing.T) {
 }
 
 func TestApiGetAppNotExist(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
@@ -35,14 +45,14 @@ func TestApiGetAppNotExist(t *testing.T) {
 }
 
 func TestApiGetAppExist(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
-	app := App{
+	app := domain.App{
 		Name:      "test",
 		URL:       "http://google.fr",
-		CheckType: responseCheck,
+		CheckType: domain.ResponseCheck,
 	}
 
 	insertApp(&app)
@@ -52,7 +62,7 @@ func TestApiGetAppExist(t *testing.T) {
 
 	assert.Equal(t, w.Code, http.StatusOK)
 
-	exApp := new(App)
+	exApp := new(domain.App)
 	err := json.Unmarshal(w.Body.Bytes(), &exApp)
 
 	assert.Equal(t, err, nil)
@@ -61,14 +71,14 @@ func TestApiGetAppExist(t *testing.T) {
 }
 
 func TestApiCreateApp(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
-	app := App{
+	app := domain.App{
 		Name:      "test",
 		URL:       "http://google.fr",
-		CheckType: responseCheck,
+		CheckType: domain.ResponseCheck,
 		PollTime:  5,
 	}
 
@@ -88,14 +98,14 @@ func TestApiCreateApp(t *testing.T) {
 }
 
 func TestApiUpdateApp(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
-	app := App{
+	app := domain.App{
 		Name:      "test",
 		URL:       "http://google.fr",
-		CheckType: responseCheck,
+		CheckType: domain.ResponseCheck,
 		PollTime:  5,
 	}
 
@@ -119,20 +129,20 @@ func TestApiUpdateApp(t *testing.T) {
 }
 
 func TestApiCreateAppHistory(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
-	app := App{
+	app := domain.App{
 		Name:      "test",
 		URL:       "http://google.fr",
-		CheckType: responseCheck,
+		CheckType: domain.ResponseCheck,
 		PollTime:  5,
 	}
 
 	insertApp(&app)
 
-	history := History{
+	history := domain.History{
 		AppID:  app.ID,
 		Date:   time.Now(),
 		Status: "up",
@@ -145,7 +155,7 @@ func TestApiCreateAppHistory(t *testing.T) {
 
 	assert.Equal(t, w.Code, http.StatusOK)
 
-	histories := []History{}
+	histories := []domain.History{}
 	err := json.Unmarshal(w.Body.Bytes(), &histories)
 
 	assert.Equal(t, err, nil)
@@ -159,14 +169,14 @@ func TestApiCreateAppHistory(t *testing.T) {
 }
 
 func TestApiDeleteApp(t *testing.T) {
-	router := setupRouter()
+	router := getRouter()
 
 	w := httptest.NewRecorder()
 
-	app := App{
+	app := domain.App{
 		Name:      "test",
 		URL:       "http://google.fr",
-		CheckType: responseCheck,
+		CheckType: domain.ResponseCheck,
 	}
 
 	insertApp(&app)

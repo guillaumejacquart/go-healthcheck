@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestInitConfig(t *testing.T) {
-	initConfig()
+	initConfig("../")
 
 	assert.Equal(t, viper.GetInt("port"), 8080)
 }

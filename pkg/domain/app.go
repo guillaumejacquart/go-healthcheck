@@ -1,4 +1,4 @@
-package main
+package domain
 
 import (
 	"time"
@@ -9,8 +9,8 @@ import (
 type checkType int
 
 const (
-	responseCheck = checkType(0)
-	statusCheck   = checkType(1)
+	ResponseCheck = checkType(0)
+	StatusCheck   = checkType(1)
 )
 
 // App is the app model

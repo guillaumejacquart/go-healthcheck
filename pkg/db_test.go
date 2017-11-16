@@ -1,12 +1,14 @@
-package main
+package pkg
 
 import (
 	"testing"
+
+	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 )
 
-func insertTestApp() (*App, error) {
+func insertTestApp() (*domain.App, error) {
 
-	testApp := new(App)
+	testApp := new(domain.App)
 	testApp.Name = "Test"
 	testApp.URL = "http://google.fr"
 	testApp.Status = "down"

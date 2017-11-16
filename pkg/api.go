@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"fmt"
@@ -6,7 +6,12 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 )
+
+type Server struct {
+	Router *gin.Engine
+}
 
 func cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -16,12 +21,20 @@ func cors() gin.HandlerFunc {
 	}
 }
 
+func createServer() Server {
+	server := Server{
+		Router: gin.Default(),
+	}
+	return server
+}
+
+func (s *Server) initializeMiddlewares() {
+	s.Router.Use(cors())
+}
+
 // Serve api server to specified port
-func setupRouter() *gin.Engine {
-	router := gin.Default()
-
-	router.Use(cors())
-
+func (s *Server) setupRoutes() {
+	router := s.Router
 	router.Static("/app", "./public")
 
 	// This handler will match /user/john but will not match neither /user/ or /user
@@ -75,7 +88,7 @@ func setupRouter() *gin.Engine {
 	})
 
 	router.POST("/apps", func(c *gin.Context) {
-		var app App
+		var app domain.App
 		if err := c.BindJSON(&app); err == nil {
 			fmt.Println(app)
 			err := insertApp(&app)
@@ -100,7 +113,7 @@ func setupRouter() *gin.Engine {
 			return
 		}
 
-		var app App
+		var app domain.App
 		if err := c.BindJSON(&app); err == nil {
 			fmt.Println(app)
 			err := updateApp(uint(idInt), app)
@@ -131,10 +144,8 @@ func setupRouter() *gin.Engine {
 			c.JSON(http.StatusOK, gin.H{"status": "ok"})
 		}
 	})
-
-	return router
 }
 
-func Serve(router *gin.Engine, port int) {
-	router.Run(fmt.Sprintf(":%v", port))
+func (s *Server) serve(port int) {
+	s.Router.Run(fmt.Sprintf(":%v", port))
 }

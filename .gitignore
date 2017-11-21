@@ -1,5 +1,5 @@
 /vendor/*/
-/db
+data.db
 
 /.vscode
 /debug

@@ -102,6 +102,7 @@ func updateApp(id uint, app domain.App) error {
 	existingApp.CheckType = app.CheckType
 	existingApp.StatusCode = app.StatusCode
 	existingApp.Notify = app.Notify
+	existingApp.CheckStatus = app.CheckStatus
 
 	return db.Save(&existingApp).Error
 }

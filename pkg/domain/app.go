@@ -16,12 +16,13 @@ const (
 // App is the app model
 type App struct {
 	gorm.Model
-	Name       string    `json:"name" binding:"required"`
-	URL        string    `json:"url"`
-	Status     string    `json:"status"`
-	PollTime   int       `json:"pollTime"`
-	LastUpDate time.Time `json:"lastUpDate"`
-	CheckType  checkType `json:"checkType"`
-	StatusCode int       `json:"statusCode"`
-	Notify     bool      `json:"notify"`
+	Name        string    `json:"name" binding:"required"`
+	URL         string    `json:"url"`
+	Status      string    `json:"status"`
+	CheckStatus string    `json:"checkStatus"`
+	PollTime    int       `json:"pollTime"`
+	LastUpDate  time.Time `json:"lastUpDate"`
+	CheckType   checkType `json:"checkType"`
+	StatusCode  int       `json:"statusCode"`
+	Notify      bool      `json:"notify"`
 }

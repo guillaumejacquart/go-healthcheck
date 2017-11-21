@@ -70,7 +70,7 @@ func getAllApps() ([]domain.App, error) {
 
 func getApp(id uint) (domain.App, error) {
 	app := domain.App{}
-	err := db.First(&app, id).Error
+	err := db.Preload("Headers").First(&app, id).Error
 
 	return app, err
 }

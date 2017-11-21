@@ -122,10 +122,10 @@
                                     <div class="col-sm-7">
                                         <div v-for="(h, index) in newApp.headers" class="row app-header-row">
                                             <div class="col-sm-5">
-                                                <input v-model="h.value" type="text" class="form-control form-control-sm" placeholder="value" />
+                                                <input v-model="h.name" type="text" class="form-control form-control-sm" placeholder="name" />
                                             </div>
                                             <div class="col-sm-5">
-                                                <input v-model="h.name" type="text" class="form-control form-control-sm" placeholder="name" />
+                                                <input v-model="h.value" type="text" class="form-control form-control-sm" placeholder="value" />
                                             </div>
                                             <div class="col-sm-2">
                                                 <div class="d-flex flex-row-reverse">
@@ -172,6 +172,7 @@
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
+    <script src="js/vue.resource.min.js"></script>
     <script src="js/apps.js"></script>
 </body>
 

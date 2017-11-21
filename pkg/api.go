@@ -79,12 +79,11 @@ func (s *Server) setupRoutes() {
 	})
 
 	router.POST("/apps", func(c *gin.Context) {
-		var app domain.App
+		var app = domain.App{}
 		if err := c.BindJSON(&app); err != nil {
 			panic(err)
 		}
 
-		fmt.Println(app)
 		err := insertApp(&app)
 		if err != nil {
 			panic(err)

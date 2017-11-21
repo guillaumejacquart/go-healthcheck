@@ -8,8 +8,13 @@ services:
       - 8080:8080
     depends_on:
       - mysql
-    volumes:
-      - ./config_docker.yml:/go/src/app/config.yml
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - DB_NAME=healthcheck
   mysql:
     image: mysql
     environment:

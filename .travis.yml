@@ -9,7 +9,7 @@ before_install:
   - govendor install +local 
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./pkg
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

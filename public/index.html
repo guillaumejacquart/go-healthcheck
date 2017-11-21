@@ -17,8 +17,7 @@
     <div id="app" v-cloak>
         <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
             <a class="navbar-brand" href="/app/">go-healthcheck</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-                aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -81,7 +80,7 @@
 
             <!-- Modal -->
             <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <form id="add-app-form" v-on:submit.prevent="saveApp()">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -119,7 +118,30 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputAppPoll" class="col-sm-5 col-form-label">Poll frequency (second)</label>
+                                    <label class="col-sm-5 col-form-label">Custom headers</label>
+                                    <div class="col-sm-7">
+                                        <div v-for="(h, index) in newApp.headers" class="row app-header-row">
+                                            <div class="col-sm-5">
+                                                <input v-model="h.value" type="text" class="form-control form-control-sm" placeholder="value" />
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <input v-model="h.name" type="text" class="form-control form-control-sm" placeholder="name" />
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="d-flex flex-row-reverse">
+                                                    <button type="button" class="btn btn-sm btn-danger" v-on:click="newApp.headers.splice(index, 1)">Del</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-row-reverse">
+                                            <button type="button" class="btn btn-sm btn-success" v-on:click="newApp.headers.push({})">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputAppPoll" class="col-sm-5 col-form-label">
+                                    Poll frequency (second)
+                                </label>
                                     <div class="col-sm-7">
                                         <input v-model="newApp.pollTime" type="number" class="form-control" id="inputAppPoll" placeholder="5">
                                     </div>
@@ -128,8 +150,8 @@
                                     <label for="inputAppNotify" class="col-sm-5 col-form-label">Notify by email</label>
                                     <div class="col-sm-7">
                                         <label class="form-check-label">
-                                            <input v-model="newApp.notify" type="checkbox" class="form-check-input" id="inputAppNotify"> Enable
-                                        </label>
+                                        <input v-model="newApp.notify" type="checkbox" class="form-check-input" id="inputAppNotify"> Enable
+                                    </label>
                                     </div>
                                 </div>
                             </div>

@@ -102,11 +102,16 @@ func (s *Server) setupRoutes() {
 			panic(err)
 		}
 
+		oldApp, _ := getApp(uint(id))
+
 		fmt.Println(app)
 		err := updateApp(uint(id), app)
 		if err != nil {
 			panic(err)
 		} else {
+			if app.CheckStatus == oldApp.CheckStatus {
+				updateCheck(app)
+			}
 			c.JSON(http.StatusOK, app)
 		}
 	})

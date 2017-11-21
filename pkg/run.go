@@ -29,7 +29,7 @@ func Run(configPath string) {
 	initConfig(configPath)
 
 	initDb()
-	go runChecksApp()
+	go registerChecks()
 
 	server := createServer()
 	server.initializeMiddlewares()

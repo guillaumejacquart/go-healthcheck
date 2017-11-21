@@ -25,4 +25,5 @@ type App struct {
 	CheckType   checkType `json:"checkType"`
 	StatusCode  int       `json:"statusCode"`
 	Notify      bool      `json:"notify"`
+	Headers     []Header  `json:"headers"`
 }

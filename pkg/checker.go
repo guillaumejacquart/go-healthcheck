@@ -7,12 +7,13 @@ import (
 	"net/smtp"
 	"time"
 
-	health "github.com/docker/go-healthcheck"
 	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 	"github.com/spf13/viper"
 )
 
-func runChecksApp() {
+var timers map[uint]*time.Ticker = make(map[uint]*time.Ticker)
+
+func registerChecks() {
 	apps, err := getAllApps()
 
 	if err != nil {
@@ -25,9 +26,22 @@ func runChecksApp() {
 }
 
 func registerCheck(a domain.App) {
-	health.RegisterPeriodicFunc(a.Name, time.Second*time.Duration(a.PollTime), func() error {
-		return checkApp(a)
-	})
+	ticker := time.NewTicker(time.Second * time.Duration(a.PollTime))
+	go func() {
+		for range ticker.C {
+			checkApp(a)
+		}
+	}()
+	timers[a.ID] = ticker
+}
+
+func updateCheck(a domain.App) {
+	switch a.CheckStatus {
+	case "stop":
+		delete(timers, a.ID)
+	case "start":
+		registerCheck(a)
+	}
 }
 
 func checkApp(a domain.App) error {
@@ -43,7 +57,15 @@ func runHTTPCheck(a domain.App) error {
 	client := http.Client{
 		Timeout: timeout,
 	}
-	response, err := client.Get(a.URL)
+	req, err := http.NewRequest("GET", a.URL, nil)
+
+	if len(a.Headers) > 0 {
+		for _, h := range a.Headers {
+			req.Header.Add(h.Name, h.Value)
+		}
+	}
+
+	response, err := client.Do(req)
 
 	if err != nil {
 		return err

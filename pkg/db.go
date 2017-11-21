@@ -57,13 +57,13 @@ func initDb() {
 
 	// Migrate the schema
 	log.Println("Migrating schema for ORM ...")
-	db.AutoMigrate(&domain.App{}, &domain.History{})
+	db.AutoMigrate(&domain.App{}, &domain.History{}, &domain.Header{})
 	log.Println("Schema migrated !")
 }
 
 func getAllApps() ([]domain.App, error) {
 	var apps []domain.App
-	err := db.Find(&apps).Error
+	err := db.Preload("Headers").Find(&apps).Error
 
 	return apps, err
 }
@@ -77,6 +77,7 @@ func getApp(id uint) (domain.App, error) {
 
 func insertApp(app *domain.App) error {
 	app.LastUpDate = time.Now()
+	app.CheckStatus = "start"
 	return db.Create(app).Error
 }
 

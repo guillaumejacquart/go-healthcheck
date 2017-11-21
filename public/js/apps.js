@@ -3,7 +3,8 @@ var app = new Vue({
     data: {
         apps: [],
         newApp: {
-            pollTime: 5
+            pollTime: 5,
+            headers:[]
         },
         search: '',
         checkType: 0,
@@ -98,7 +99,8 @@ var app = new Vue({
         },
         resetForm: function () {
             this.newApp = {
-                pollTime: 5
+                pollTime: 5,
+                headers: []
             };
             $('#add-app').modal('show');
         },

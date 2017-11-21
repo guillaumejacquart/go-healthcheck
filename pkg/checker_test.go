@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func TestRunChecksApp(t *testing.T) {
+func TestRegisterChecks(t *testing.T) {
 	apps, _ := getAllApps()
 	for _, a := range apps {
 		deleteApp(a.ID)
@@ -25,7 +25,7 @@ func TestRunChecksApp(t *testing.T) {
 
 	insertApp(&app)
 
-	runChecksApp()
+	registerChecks()
 
 	timer := time.NewTimer(time.Second * 3)
 

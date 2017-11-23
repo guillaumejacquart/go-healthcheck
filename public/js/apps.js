@@ -6,9 +6,11 @@ var app = new Vue({
             pollTime: 5,
             headers: []
         },
+        timer: null,
         search: '',
         checkType: 0,
-        statusCode: 200
+        statusCode: 200,
+        loading: true
     },
     computed: {
         filteredApps: function() {
@@ -21,14 +23,25 @@ var app = new Vue({
     },
     created: function() {
         this.getApps()
-        window.setInterval(this.getApps, 2000)
+        this.startTimer()
     },
     methods: {
+        startTimer: function() {
+            this.timer = window.setInterval(this.getApps, 2000)
+            this.loading = true
+        },
+        stopTimer: function() {
+            clearInterval(this.timer)
+        },
+        logout: function(){
+            auth.logout()
+        },
         getApps: function() {
             var that = this;
-            that.$http.get('../apps').then(response => {
+            that.$http.get('../api/apps').then(response => {
                 return response.json().then(function(json) {
                     that.apps = json;
+                    that.loading = false;
                 });
             });
         },
@@ -39,7 +52,7 @@ var app = new Vue({
                 return;
             }
 
-            that.$http.get("../apps/" + app.ID + "/history").then(function(response) {
+            that.$http.get("../api/apps/" + app.ID + "/history").then(function(response) {
                 return response.json().then(function(json) {
                     that.history = {
                         app_id: app.ID,
@@ -48,16 +61,16 @@ var app = new Vue({
                 });
             });
         },
-        changeStatus: function(status, app){
+        changeStatus: function(status, app) {
             app.checkStatus = status
             this.save(app);
         },
-        saveApp: function(){
+        saveApp: function() {
             this.save(this.newApp);
         },
         save: function(app) {
-            var url = app.ID ? ('../apps/' + app.ID) : '../apps';
-            
+            var url = app.ID ? ('../api/apps/' + app.ID) : '../api/apps';
+
             var data = {
                 name: app.name,
                 url: app.url,
@@ -68,7 +81,7 @@ var app = new Vue({
                 headers: app.headers,
                 checkStatus: app.checkStatus
             }
-            
+
             var options = {
                 headers: {
                     "Content-Type": "application/json"
@@ -89,7 +102,7 @@ var app = new Vue({
                 return;
             }
 
-            this.$http.delete("../apps/" + app.ID)
+            this.$http.delete("../api/apps/" + app.ID)
                 .then(function(res) {}, function(e) {
                     alert("Error submitting form!");
                 });

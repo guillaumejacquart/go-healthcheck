@@ -31,11 +31,12 @@
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <button class="btn btn-success my-2 my-sm-0" type="button" v-on:click="resetForm()">Add app</button>
+                    <button class="btn btn-dark m-2 my-sm-0" type="button" v-on:click="logout()">Logout</button>
                 </form>
             </div>
         </nav>
         <div class="container">
-            <div id="app-content">
+            <div id="app-content" v-if="!loading">
                 <div id="no-app" v-if="!apps.length" class="justify-content-center">
                     <div>Looks like you haven't defined any app yet !</div>
                     <button class="btn btn-success" type="button" v-on:click="resetForm()">Add app</button>
@@ -79,6 +80,8 @@
                     </div>
                 </div>
             </div>
+            
+            <div id="app-loading" v-if="loading">Loading ...</div>
 
             <!-- Modal -->
             <div class="modal fade" id="add-app" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
@@ -168,6 +171,40 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="Add app" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="add-app-form" v-on:submit.prevent="login()">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="inputUsername" class="col-sm-5 col-form-label">Username</label>
+                            <div class="col-sm-7">
+                                <input v-model="username" type="text" class="form-control" id="inputUsername" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Password</label>
+                            <div class="col-sm-7">
+                                <input v-model="password" type="text" class="form-control" id="inputPassword" placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="js/jquery-3.2.1.slim.min.js"></script>
@@ -175,7 +212,9 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/vue.resource.min.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/apps.js"></script>
+    <script src="js/login.js"></script>
 </body>
 
 </html>

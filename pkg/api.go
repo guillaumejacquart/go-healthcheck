@@ -4,13 +4,17 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
+	"github.com/spf13/viper"
 )
 
 type Server struct {
-	Router *gin.Engine
+	Router    *gin.Engine
+	ApiRouter *gin.RouterGroup
 }
 
 func cors() gin.HandlerFunc {
@@ -31,12 +35,44 @@ func createServer() Server {
 func (s *Server) initializeMiddlewares() {
 	s.Router.Use(cors())
 	s.Router.Use(gin.Recovery())
+	s.ApiRouter = s.Router.Group("/api")
+
+	if viper.GetBool("authentication.enabled") {
+		// the jwt middleware
+		authMiddleware := &jwt.GinJWTMiddleware{
+			Realm:      "test zone",
+			Key:        []byte("secret key"),
+			Timeout:    time.Hour,
+			MaxRefresh: time.Hour,
+			Authenticator: func(userId string, password string, c *gin.Context) (string, bool) {
+				if userId == viper.GetString("authentication.username") && password == viper.GetString("authentication.password") {
+					return userId, true
+				}
+
+				return userId, false
+			},
+			Authorizator: func(userId string, c *gin.Context) bool {
+				return true
+			},
+			Unauthorized: func(c *gin.Context, code int, message string) {
+				c.JSON(code, gin.H{
+					"code":    code,
+					"message": message,
+				})
+			},
+			TokenLookup:   "header:Authorization",
+			TokenHeadName: "Bearer",
+			TimeFunc:      time.Now,
+		}
+		s.Router.POST("/login", authMiddleware.LoginHandler)
+		s.ApiRouter.Use(authMiddleware.MiddlewareFunc())
+	}
 }
 
 // Serve api server to specified port
 func (s *Server) setupRoutes() {
-	router := s.Router
-	router.Static("/app", "./public")
+	s.Router.Static("/app", "./public")
+	router := s.ApiRouter
 
 	// This handler will match /user/john but will not match neither /user/ or /user
 	router.GET("/apps", func(c *gin.Context) {

@@ -7,6 +7,12 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "zyZXrn3RtSehrnJhBj6ltLoqnC4=",
+			"path": "github.com/appleboy/gin-jwt",
+			"revision": "4ef6a7a1574ad9f81f6ba45c4b74945f62e39a21",
+			"revisionTime": "2017-10-14T05:03:01Z"
+		},
+		{
 			"checksumSHA1": "gALmTf0q6kHO/cGP85mBwc/cwtk=",
 			"path": "github.com/docker/distribution/context",
 			"revision": "3800056b8832cf6075e78b282ac010131d8687bc",
@@ -347,6 +353,12 @@
 			"path": "golang.org/x/text/unicode/norm",
 			"revision": "6eab0e8f74e86c598ec3b6fad4888e0c11482d48",
 			"revisionTime": "2017-09-27T13:34:20Z"
+		},
+		{
+			"checksumSHA1": "INVZqUBfG2iYvNMrIB7OQGUw5dA=",
+			"path": "gopkg.in/dgrijalva/jwt-go.v3",
+			"revision": "dbeaa9332f19a944acb5736b4456cfcc02140e29",
+			"revisionTime": "2017-10-19T21:57:19Z"
 		},
 		{
 			"checksumSHA1": "P/k5ZGf0lEBgpKgkwy++F7K1PSg=",

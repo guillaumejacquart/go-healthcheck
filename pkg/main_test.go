@@ -9,7 +9,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	initConfig("../")
+	initConfig("../test")
 
 	viper.Set("db.type", "sqlite3")
 	viper.Set("db.path", "test.db")

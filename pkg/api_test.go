@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/guillaumejacquart/go-healthcheck/pkg/domain"
 	"github.com/magiconair/properties/assert"
+	"github.com/spf13/viper"
 )
 
 func getRouter() *gin.Engine {
@@ -27,7 +28,7 @@ func TestApiGetAllApps(t *testing.T) {
 
 	w := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/apps", nil)
+	req, _ := http.NewRequest("GET", "/api/apps", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -47,7 +48,7 @@ func TestApiGetAppNotExist(t *testing.T) {
 
 	w := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/apps/1", nil)
+	req, _ := http.NewRequest("GET", "/api/apps/1234", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusInternalServerError)
@@ -66,7 +67,7 @@ func TestApiGetAppExist(t *testing.T) {
 
 	insertApp(&app)
 
-	req, _ := http.NewRequest("GET", "/apps/"+fmt.Sprint(app.ID), nil)
+	req, _ := http.NewRequest("GET", "/api/apps/"+fmt.Sprint(app.ID), nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -93,7 +94,7 @@ func TestApiCreateApp(t *testing.T) {
 
 	appBytes, _ := json.Marshal(app)
 
-	req, _ := http.NewRequest("POST", "/apps", bytes.NewReader(appBytes))
+	req, _ := http.NewRequest("POST", "/api/apps", bytes.NewReader(appBytes))
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -124,7 +125,7 @@ func TestApiUpdateApp(t *testing.T) {
 
 	appBytes, _ := json.Marshal(app)
 
-	req, _ := http.NewRequest("PUT", "/apps/"+fmt.Sprint(app.ID), bytes.NewReader(appBytes))
+	req, _ := http.NewRequest("PUT", "/api/apps/"+fmt.Sprint(app.ID), bytes.NewReader(appBytes))
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -159,7 +160,7 @@ func TestApiCreateAppHistory(t *testing.T) {
 
 	insertHistory(history)
 
-	req, _ := http.NewRequest("GET", "/apps/"+fmt.Sprint(app.ID)+"/history", nil)
+	req, _ := http.NewRequest("GET", "/api/apps/"+fmt.Sprint(app.ID)+"/history", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -190,7 +191,7 @@ func TestApiDeleteApp(t *testing.T) {
 
 	insertApp(&app)
 
-	req, _ := http.NewRequest("DELETE", "/apps/"+fmt.Sprint(app.ID), nil)
+	req, _ := http.NewRequest("DELETE", "/api/apps/"+fmt.Sprint(app.ID), nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, w.Code, http.StatusOK)
@@ -200,4 +201,20 @@ func TestApiDeleteApp(t *testing.T) {
 	if err == nil {
 		t.Error("App deletion failed")
 	}
+}
+
+func TestApiAuthorization(t *testing.T) {
+	viper.Set("authentication.enabled", true)
+	viper.Set("authentication.username", "admin")
+	viper.Set("authentication.password", "admin")
+	router := getRouter()
+
+	w := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/api/apps", nil)
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, w.Code, http.StatusUnauthorized)
+
+	viper.Set("authentication.enabled", false)
 }

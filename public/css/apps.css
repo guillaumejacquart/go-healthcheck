@@ -29,6 +29,12 @@
     padding-top: 7rem;
 }
 
+#app-loading{
+    padding-top: 7rem;
+    text-align: center;
+    font-size:1.5rem;
+}
+
 .app{
     position: relative;
     min-height: 13.5rem;
@@ -53,6 +59,7 @@
 
 .app-url{
     font-size: 0.75rem;
+    word-break: break-all;
 }
 
 .app-url a{        

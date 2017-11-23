@@ -48,17 +48,25 @@ var app = new Vue({
                 });
             });
         },
-        saveApp: function() {
-            var url = this.newApp.isUpdate ? ('../apps/' + this.newApp.ID) : '../apps';
+        changeStatus: function(status, app){
+            app.checkStatus = status
+            this.save(app);
+        },
+        saveApp: function(){
+            this.save(this.newApp);
+        },
+        save: function(app) {
+            var url = app.ID ? ('../apps/' + app.ID) : '../apps';
             
             var data = {
-                name: this.newApp.name,
-                url: this.newApp.url,
-                pollTime: parseInt(this.newApp.pollTime),
-                checkType: parseInt(this.newApp.checkType),
-                statusCode: parseInt(this.newApp.statusCode),
-                notify: this.newApp.notify,
-                headers: this.newApp.headers
+                name: app.name,
+                url: app.url,
+                pollTime: parseInt(app.pollTime),
+                checkType: parseInt(app.checkType),
+                statusCode: parseInt(app.statusCode),
+                notify: app.notify,
+                headers: app.headers,
+                checkStatus: app.checkStatus
             }
             
             var options = {
@@ -66,7 +74,7 @@ var app = new Vue({
                     "Content-Type": "application/json"
                 }
             }
-            var promise = this.newApp.isUpdate ? this.$http.put(url, data, options) : this.$http.post(url, data, options)
+            var promise = app.ID ? this.$http.put(url, data, options) : this.$http.post(url, data, options)
             promise.then(function(res) {
                     if (res.status == 200) {
                         $('#add-app').modal('hide');

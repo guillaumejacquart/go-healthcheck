@@ -103,13 +103,13 @@ func (s *Server) setupRoutes() {
 
 		oldApp, _ := getApp(uint(id))
 
-		fmt.Println(app)
 		err := updateApp(uint(id), app)
 		if err != nil {
 			panic(err)
 		} else {
-			if app.CheckStatus == oldApp.CheckStatus {
-				updateCheck(app)
+			if app.CheckStatus != oldApp.CheckStatus {
+				lastApp, _ := getApp(uint(id))
+				updateCheck(lastApp)
 			}
 			c.JSON(http.StatusOK, app)
 		}

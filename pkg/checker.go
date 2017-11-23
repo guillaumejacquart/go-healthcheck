@@ -21,7 +21,9 @@ func registerChecks() {
 	}
 
 	for _, a := range apps {
-		registerCheck(a)
+		if a.CheckStatus == "start" {
+			registerCheck(a)
+		}
 	}
 }
 
@@ -38,6 +40,7 @@ func registerCheck(a domain.App) {
 func updateCheck(a domain.App) {
 	switch a.CheckStatus {
 	case "stop":
+		timers[a.ID].Stop()
 		delete(timers, a.ID)
 	case "start":
 		registerCheck(a)
@@ -46,6 +49,7 @@ func updateCheck(a domain.App) {
 
 func checkApp(a domain.App) error {
 	lastApp, _ := getApp(a.ID)
+
 	err := runHTTPCheck(lastApp)
 	updateCheckedApp(a, lastApp, err)
 

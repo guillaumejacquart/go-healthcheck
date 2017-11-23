@@ -105,6 +105,9 @@ func updateApp(id uint, app domain.App) error {
 	existingApp.Notify = app.Notify
 	existingApp.CheckStatus = app.CheckStatus
 
+	db.Model(existingApp).Association("Headers").Clear()
+	existingApp.Headers = app.Headers
+
 	return db.Save(&existingApp).Error
 }
 

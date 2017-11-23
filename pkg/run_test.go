@@ -12,8 +12,3 @@ func TestInitConfig(t *testing.T) {
 
 	assert.Equal(t, viper.GetInt("port"), 8080)
 }
-
-func TestRun(t *testing.T) {
-	go Run("../")
-	return
-}

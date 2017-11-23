@@ -33,6 +33,15 @@ func TestApiGetAllApps(t *testing.T) {
 	assert.Equal(t, w.Code, http.StatusOK)
 }
 
+func TestGetIdPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	getId("notint")
+}
+
 func TestApiGetAppNotExist(t *testing.T) {
 	router := getRouter()
 

@@ -107,7 +107,7 @@ var app = new Vue({
             $('#add-app').modal('show');
         },
         formatUpdate: function(date) {
-            if (date.indexOf('0001') === 0) {
+            if (!date) {
                 return 'Never'
             }
             return new Date(date).toUTCString();

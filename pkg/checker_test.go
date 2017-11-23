@@ -142,3 +142,29 @@ func TestAddHistory(t *testing.T) {
 		t.Error("App history not updated")
 	}
 }
+
+func TestUpdateCheck(t *testing.T) {
+	lastApp := domain.App{
+		Name:      "test8",
+		URL:       "http://google.fr",
+		CheckType: domain.ResponseCheck,
+		PollTime:  5,
+	}
+
+	insertApp(&lastApp)
+
+	lastApp.CheckStatus = "start"
+	updateCheck(lastApp)
+
+	timer := timers[lastApp.ID]
+	if timer == nil {
+		t.Error("Timer is nul after app status set to start")
+	}
+
+	lastApp.CheckStatus = "stop"
+	updateCheck(lastApp)
+
+	_, ok := timers[lastApp.ID]
+
+	assert.Equal(t, ok, false)
+}

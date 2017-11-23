@@ -67,7 +67,7 @@ func (s *Server) setupRoutes() {
 
 	// This handler will match /user/john but will not match neither /user/ or /user
 	router.GET("/apps/:id/history", func(c *gin.Context) {
-		id := getId(c)
+		id := getId(c.Param("id"))
 
 		histories, err := getAppHistory(uint(id))
 
@@ -94,7 +94,7 @@ func (s *Server) setupRoutes() {
 	})
 
 	router.PUT("/apps/:id", func(c *gin.Context) {
-		id := getId(c)
+		id := getId(c.Param("id"))
 
 		var app domain.App
 		if err := c.BindJSON(&app); err != nil {
@@ -116,7 +116,7 @@ func (s *Server) setupRoutes() {
 	})
 
 	router.DELETE("/apps/:id", func(c *gin.Context) {
-		id := getId(c)
+		id := getId(c.Param("id"))
 
 		err := deleteApp(uint(id))
 		if err != nil {
@@ -127,9 +127,7 @@ func (s *Server) setupRoutes() {
 	})
 }
 
-func getId(c *gin.Context) int {
-	id := c.Param("id")
-
+func getId(id string) int {
 	idInt, err := strconv.Atoi(id)
 
 	if err != nil {

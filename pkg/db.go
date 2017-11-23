@@ -76,7 +76,6 @@ func getApp(id uint) (domain.App, error) {
 }
 
 func insertApp(app *domain.App) error {
-	app.LastUpDate = time.Now()
 	app.CheckStatus = "start"
 	return db.Create(app).Error
 }
@@ -119,7 +118,8 @@ func updateAppStatus(id uint, status string) error {
 
 	existingApp.Status = status
 	if status == "up" {
-		existingApp.LastUpDate = time.Now()
+		now := time.Now()
+		existingApp.LastUpDate = &now
 	}
 
 	return db.Save(&existingApp).Error

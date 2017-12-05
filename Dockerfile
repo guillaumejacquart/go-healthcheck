@@ -15,4 +15,7 @@ WORKDIR /root/
 COPY --from=0 /go/src/github.com/guillaumejacquart/go-healthcheck/app .
 COPY --from=0 /go/src/github.com/guillaumejacquart/go-healthcheck/config.yml .
 COPY --from=0 /go/src/github.com/guillaumejacquart/go-healthcheck/public ./public
+
+EXPOSE 8080
+
 CMD ["./app"]  

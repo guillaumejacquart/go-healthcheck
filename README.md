@@ -1,9 +1,9 @@
 # Go healthcheck
 Go healthcheck is an opensource healthcheck system that ensures your HTTP applications are up and running.
 
-![Travis CI](https://travis-ci.org/guillaumejacquart/go-healthcheck.svg?branch=master) [![codecov](https://codecov.io/gh/guillaumejacquart/go-healthcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/guillaumejacquart/go-healthcheck)
+[![Build Status](https://travis-ci.org/guillaumejacquart/go-healthcheck.svg?branch=master)](https://travis-ci.org/guillaumejacquart/go-healthcheck) [![codecov](https://codecov.io/gh/guillaumejacquart/go-healthcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/guillaumejacquart/go-healthcheck)
 
-Live demo : https://check.apps.guillaumejacquart.com/app/
+Katacoda tutorial : https://www.katacoda.com/ghiltoniel/scenarios/2
 
 ## Run
 Create the docker-compose.yml file :
@@ -54,10 +54,13 @@ The configuration can be set in any of the following places :
   - username: the smtp username
   - password: the smtp password
   - from: the from email field
-  - to: the to email field
+  - to: the to email field for notification
+- authentication:
+  - enabled: is authentication enabled
+  - username: the administrator username
+  - password: the administrator password
 
 ## TBD
 
-- Notification email
-- Notification pushbullet or else
+- Notification by API calls
 - Test coverage
